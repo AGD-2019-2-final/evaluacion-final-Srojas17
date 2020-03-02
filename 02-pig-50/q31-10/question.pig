@@ -10,13 +10,21 @@
 -- 
 fs -rm -f -r output;
 -- 
-u = LOAD 'data.csv' USING PigStorage(',') 
+--
+-- >>> Escriba su respuesta a partir de este punto <<<
+--
+data = LOAD 'data.csv' USING PigStorage(',') 
     AS (id:int, 
         firstname:CHARARRAY, 
         surname:CHARARRAY, 
         birthday:CHARARRAY, 
         color:CHARARRAY, 
         quantity:INT);
---
--- >>> Escriba su respuesta a partir de este punto <<<
---
+
+dato = foreach data generate SUBSTRING(birthday,0,4) as anio;
+
+dato_g = group dato by anio;
+
+dato_final = foreach dato_g generate group,   COUNT(dato);
+
+store dato_final into 'output' USING PigStorage(',');

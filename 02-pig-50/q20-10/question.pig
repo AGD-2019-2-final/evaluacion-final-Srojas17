@@ -18,13 +18,19 @@
 -- 
 fs -rm -f -r output;
 -- 
-u = LOAD 'data.csv' USING PigStorage(',') 
+--
+-- >>> Escriba su respuesta a partir de este punto <<<
+--
+data = LOAD 'data.csv' USING PigStorage(',') 
     AS (id:int, 
         firstname:CHARARRAY, 
         surname:CHARARRAY, 
         birthday:CHARARRAY, 
         color:CHARARRAY, 
         quantity:INT);
---
--- >>> Escriba su respuesta a partir de este punto <<<
---
+
+dato = FOREACH data GENERATE firstname,color;
+
+filt = FILTER dato BY NOT STARTSWITH(color,'b');
+
+store filt into 'output' USING PigStorage(',');

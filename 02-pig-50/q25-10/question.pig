@@ -16,13 +16,17 @@
 -- 
 fs -rm -f -r output;
 -- 
-u = LOAD 'data.csv' USING PigStorage(',') 
+--
+-- >>> Escriba su respuesta a partir de este punto <<<
+--
+data = LOAD 'data.csv' USING PigStorage(',') 
     AS (id:int, 
         firstname:CHARARRAY, 
         surname:CHARARRAY, 
         birthday:CHARARRAY, 
         color:CHARARRAY, 
         quantity:INT);
---
--- >>> Escriba su respuesta a partir de este punto <<<
---
+
+dato = FOREACH data GENERATE INDEXOF(firstname,'a',0);
+
+store dats into 'output' USING PigStorage(' ');

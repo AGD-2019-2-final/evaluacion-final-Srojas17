@@ -11,4 +11,21 @@ fs -rm -f -r output;
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+dato = LOAD 'data.tsv' USING PigStorage('\t') 
+    AS (letra:CHARARRAY, 
+        bolsa:bag{(a:CHARARRAY)},
+        mape:map[]);
+DUMP dato;
+
+temp= FOREACH dato GENERATE FLATTEN(bolsa) as letra;
+dump temp;
+
+
+red= group temp by letra;
+dump red;
+
+conteo = FOREACH red GENERATE group, COUNT(temp);
+dump conteo;
+
+store conteo into 'output' using PigStorage('\t');
 
